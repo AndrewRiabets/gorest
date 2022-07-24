@@ -1,25 +1,30 @@
-import logo from './logo.svg';
-import './App.css';
+import { Route, Routes } from "react-router-dom";
+import { lazy, Suspense } from "react";
+import routes from "./routes/routes";
 
-function App() {
+// import StartPage from "./components/StartPage/StartPage";
+// import UsersList from "./components/UsersList/UsersList";
+// import UserEdit from "./components/UserEdit/UserEdit";
+// import NotFoundPage from "./components/NotFoundPage/NotFoundPage";
+
+const StartPage = lazy(() => import("./components/StartPage/StartPage"));
+const UsersList = lazy(() => import("./components/UsersList/UsersList"));
+const UserEdit = lazy(() => import("./components/UserEdit/UserEdit"));
+const NotFoundPage = lazy(() =>
+  import("./components/NotFoundPage/NotFoundPage")
+);
+
+export default function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <>
+      <Suspense>
+        <Routes>
+          <Route exact path={routes.start} element={<StartPage />}></Route>
+          <Route exact path={routes.users} element={<UsersList />}></Route>
+          <Route exact path={routes.edit} element={<UserEdit />}></Route>
+          <Route path="*" element={<NotFoundPage />} />
+        </Routes>
+      </Suspense>
+    </>
   );
 }
-
-export default App;
