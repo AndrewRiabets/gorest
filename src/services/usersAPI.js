@@ -7,20 +7,25 @@ const token = {
   },
 };
 
-export const getUsersData = async (pageNumber, gender) => {
-  const { data } = await axios.get(`${BASE_URL}/users?page=${pageNumber}`);
-  let users;
-  if (gender !== "all") {
-    users = data.data.filter((el) => {
-      return el.gender === gender;
-    });
+export const getUsersData = async (pageNumber, genderType) => {
+  let response;
+  if (genderType !== "all") {
+    response = await axios.get(
+      `${BASE_URL}/users?page=${pageNumber}&gender=${genderType}`
+    );
   } else {
-    users = data.data;
+    response = await axios.get(`${BASE_URL}/users?page=${pageNumber}`);
   }
+  const { data } = response;
   return {
-    users,
+    users: data.data,
     pagination: data.meta.pagination,
   };
+};
+
+export const getUserDataById = async ({ userId }) => {
+  const { data } = await axios.get(`${BASE_URL}users/${userId}`);
+  return data.data;
 };
 
 export const patchUserData = async (userId, userData) => {
